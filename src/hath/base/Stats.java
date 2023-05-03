@@ -167,13 +167,11 @@ public class Stats {
 	}
 
 	public static void bytesSent(int b) {
-		if(bytesSentHistory == null) {
-			return;
-		}
 
 		if(clientRunning) {
 			bytesSent += b;
-			bytesSentHistory[0] += (int) b;
+			if (bytesSentHistory != null)
+				bytesSentHistory[0] += (int) b;
 		}
 
 		statChanged("bytesSent");
