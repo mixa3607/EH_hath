@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="artifacts">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/HentaiAtHome.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/HentaiAtHomeGUI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
