@@ -1,0 +1,15 @@
+services:
+  hath:
+    image: ${REGISTRY-local}/${IMAGE_NAME-eh_hath}:${IMAGE_TAG-latest}
+    build:
+      network: host
+      dockerfile: ./Dockerfile
+      context: ./
+      args:
+        # export HATH_VERSION="$(cat "source/src/hath/base/Settings.java" | grep CLIENT_VERSION | sed -E 's|.*"([0-9\.]+)".*|\1|1')"
+        - HATH_VERSION
+        - GIT_REF
+        - GIT_REF_TYPE
+        - GIT_COMMIT_SHA
+        - PROJECT_URL
+        - REPO_URL

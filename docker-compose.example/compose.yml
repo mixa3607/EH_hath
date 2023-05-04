@@ -1,0 +1,23 @@
+services:
+  hath:
+    image: ghcr.io/mixa3607/eh_hath:${IMAGE_TAG-master}
+    environment:
+      - HATH_CLIENT_ID=$HATH_CLIENT_ID
+      - HATH_CLIENT_KEY=$HATH_CLIENT_KEY
+      - HATH_PORT=$HATH_PORT
+      - METRICS_CLIENT_NAME=$METRICS_CLIENT_NAME
+      - METRICS_USER_ID=$METRICS_USER_ID
+    volumes:
+      - "./data/cache:/hath/cache"
+      - "./data/data:/hath/data"
+      - "./data/download:/hath/download"
+      - "./data/log:/hath/log"
+      - "./data/tmp:/hath/tmp"
+    expose: 
+      - $HATH_PORT
+      - '9500'
+    ports: 
+      - $HATH_PORT:$HATH_PORT
+      - $METRICS_PORT:9500
+    stop_grace_period: 5m
+    restart: unless-stopped

@@ -148,9 +148,9 @@ public class HTTPMetricsResponse {
 
 	private String getMetricsString() {
 		StringBuilder builder = new StringBuilder();
-		Map<String,String> defaultLabels = Map.ofEntries(
-				Map.entry("user", String.valueOf(Settings.getClientID())),
-				Map.entry("name", Settings.getClientName()),
+		Map<String, String> defaultLabels = Map.ofEntries(
+				Map.entry("user", Settings.getMetricsUserId()),
+				Map.entry("name", Settings.getMetricsClientName()),
 				Map.entry("host", Settings.getClientHost())
 		);
 
@@ -162,7 +162,7 @@ public class HTTPMetricsResponse {
 		appendMetric(builder,
 				"Client Status", "gauge",
 				"eh_hath_client_status",
-				Stats.isClientSuspended() ? 10 : Stats.isClientRunning() ? 20 : 30, defaultLabels);
+				Stats.isClientSuspended() ? 10 : Stats.isClientRunning() ? 20 : 0, defaultLabels);
 
 		appendMetric(builder,
 				"Client uptime in seconds", "counter",
