@@ -20,4 +20,4 @@ WORKDIR /hath
 COPY --from=build /source/build/HentaiAtHome.jar ./
 COPY ./hath_run.sh ./
 
-CMD ["ls", "-la"]
+CMD ["/hath/hath_run.sh"]
