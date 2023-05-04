@@ -26,6 +26,7 @@ package hath.base;
 import java.io.File;
 import java.net.InetAddress;
 import java.util.*;
+import java.lang.*;
 
 public class Settings {
 	public static final String NEWLINE = System.getProperty("line.separator");
@@ -56,12 +57,11 @@ public class Settings {
 	private static String rpcServerCurrent = null, rpcServerLastFailed = null;
 	private static Hashtable<String, Integer> staticRanges = null;
 	private static File datadir = null, logdir = null, cachedir = null, tempdir = null, downloaddir = null;
-	private static InetAddress metricsListenAddress = null;
-	private static String clientKey = "", clientHost = "", metricsClientName = "", metricsUserId = "", dataDirPath = "data", logDirPath = "log", cacheDirPath = "cache", tempDirPath = "tmp", downloadDirPath = "download";
+	private static String clientKey = "", clientHost = "", dataDirPath = "data", logDirPath = "log", cacheDirPath = "cache", tempDirPath = "tmp", downloadDirPath = "download";
 
-	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 104857600, currentStaticRangeCount = 0, metricsPort = 9100;
+	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 104857600, currentStaticRangeCount = 0;
 	private static long disklimit_bytes = 0, diskremaining_bytes = 0, fileSystemBlocksize = 4096;
-	private static boolean verifyCache = false, rescanCache = false, skipFreeSpaceCheck = false, warnNewClient = false, useLessMemory = false, disableBWM = false, disableDownloadBWM = false, disableLogs = false, flushLogs = false, disableIPOriginCheck = false, disableFloodControl = false, enableMetrics = false;
+	private static boolean verifyCache = false, rescanCache = false, skipFreeSpaceCheck = false, warnNewClient = false, useLessMemory = false, disableBWM = false, disableDownloadBWM = false, disableLogs = false, flushLogs = false, disableIPOriginCheck = false, disableFloodControl = false;
 
 	public static void setActiveClient(HentaiAtHomeClient client) {
 		activeClient = client;
@@ -314,26 +314,6 @@ public class Settings {
 			else if(setting.equals("flush_logs")) {
 				flushLogs = value.equals("true");
 			}
-			else if(setting.equals("enable_metrics")) {
-				enableMetrics = value.equals("true");
-			}
-			else if(setting.equals("metrics_port")) {
-				metricsPort = Integer.parseInt(value);
-			}
-			else if(setting.equals("metrics_address")) {
-				try {
-					metricsListenAddress = InetAddress.getByName(value);
-				} catch(Exception e) {
-					Out.warning("Failed to set metricsListenAddress to " + value + ". Using 127.0.0.1");
-					metricsListenAddress = InetAddress.getByName("127.0.0.1");
-				}
-			}
-			else if(setting.equals("metrics_name")) {
-				metricsClientName = value;
-			}
-			else if(setting.equals("metrics_user")) {
-				metricsUserId = value;
-			}
 			else if(!setting.equals("silentstart")) {
 				// don't flag errors if the setting is handled by the GUI
 				Out.warning("Unknown setting " + setting + " = " + value);
@@ -387,32 +367,20 @@ public class Settings {
 		return downloaddir;
 	}
 
-	public static int getClientID() { return clientID; }
+	public static int getClientID() {
+		return clientID;
+	}
 
 	public static String getClientKey() {
 		return clientKey;
 	}
 
-	public static String getClientHost() { return clientHost; }
+	public static String getClientHost() {
+		return clientHost;
+	}
 
 	public static int getClientPort() {
 		return clientPort;
-	}
-
-	public static String getMetricsClientName() { return metricsClientName; }
-
-	public static String getMetricsUserId() { return metricsUserId; }
-
-	public static boolean isEnableMetrics() {
-		return enableMetrics;
-	}
-
-	public static int getMetricsPort() {
-		return metricsPort;
-	}
-
-	public static InetAddress getMetricsAddress() {
-		return metricsListenAddress;
 	}
 
 	public static int getThrottleBytesPerSec() {
