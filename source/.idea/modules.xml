@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HentaiAtHome_1.6.1_src.iml" filepath="$PROJECT_DIR$/HentaiAtHome_1.6.1_src.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HentaiAtHome.iml" filepath="$PROJECT_DIR$/HentaiAtHome.iml" />
     </modules>
   </component>
 </project>

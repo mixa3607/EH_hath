@@ -57,7 +57,7 @@ public class Settings {
 	private static Hashtable<String, Integer> staticRanges = null;
 	private static File datadir = null, logdir = null, cachedir = null, tempdir = null, downloaddir = null;
 	private static InetAddress metricsListenAddress = null;
-	private static String clientKey = "", clientHost = "", dataDirPath = "data", logDirPath = "log", cacheDirPath = "cache", tempDirPath = "tmp", downloadDirPath = "download";
+	private static String clientKey = "", clientHost = "", clientName = "", dataDirPath = "data", logDirPath = "log", cacheDirPath = "cache", tempDirPath = "tmp", downloadDirPath = "download";
 
 	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 104857600, currentStaticRangeCount = 0, metricsPort = 0;
 	private static long disklimit_bytes = 0, diskremaining_bytes = 0, fileSystemBlocksize = 4096;
@@ -328,6 +328,9 @@ public class Settings {
 					metricsListenAddress = InetAddress.getByName("127.0.0.1");
 				}
 			}
+			else if(setting.equals("name")) {
+				clientName = value;
+			}
 			else if(!setting.equals("silentstart")) {
 				// don't flag errors if the setting is handled by the GUI
 				Out.warning("Unknown setting " + setting + " = " + value);
@@ -389,13 +392,13 @@ public class Settings {
 		return clientKey;
 	}
 
-	public static String getClientHost() {
-		return clientHost;
-	}
+	public static String getClientHost() { return clientHost; }
 
 	public static int getClientPort() {
 		return clientPort;
 	}
+
+	public static String getClientName() { return clientName; }
 
 	public static boolean isEnableMetrics() {
 		return enableMetrics;
