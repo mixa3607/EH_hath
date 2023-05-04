@@ -19,7 +19,5 @@ LABEL image.repo_url=$REPO_URL
 WORKDIR /hath
 COPY --from=build /source/build/HentaiAtHome.jar ./
 COPY ./hath_run.sh ./
-RUN ls
 
-VOLUME ["/hath/cache", "/hath/data", "/hath/download", "/hath/log", "/hath/tmp"]
 CMD ["ls", "-la"]

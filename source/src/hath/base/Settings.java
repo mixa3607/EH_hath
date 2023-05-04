@@ -59,7 +59,7 @@ public class Settings {
 	private static InetAddress metricsListenAddress = null;
 	private static String clientKey = "", clientHost = "", metricsClientName = "", metricsUserId = "", dataDirPath = "data", logDirPath = "log", cacheDirPath = "cache", tempDirPath = "tmp", downloadDirPath = "download";
 
-	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 104857600, currentStaticRangeCount = 0, metricsPort = 0;
+	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 104857600, currentStaticRangeCount = 0, metricsPort = 9100;
 	private static long disklimit_bytes = 0, diskremaining_bytes = 0, fileSystemBlocksize = 4096;
 	private static boolean verifyCache = false, rescanCache = false, skipFreeSpaceCheck = false, warnNewClient = false, useLessMemory = false, disableBWM = false, disableDownloadBWM = false, disableLogs = false, flushLogs = false, disableIPOriginCheck = false, disableFloodControl = false, enableMetrics = false;
 
