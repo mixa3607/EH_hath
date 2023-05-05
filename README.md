@@ -46,7 +46,7 @@ Label values:
 - name - arg `--metrics-user=$METRICS_USER_ID`
 - host - resolved from command server
 
-> ### For more metrics you can also use [EH_metrics](https://github.com/mixa3607/EH_metrics) project
 
 ### Grafana sample dashboard
 ![grafana](./grafana1.png)
+> ### For more metrics you can also use [EH_metrics](https://github.com/mixa3607/EH_metrics) project
