@@ -1,8 +1,8 @@
 /*
 
-Copyright 2008-2020 E-Hentai.org
+Copyright 2008-2023 E-Hentai.org
 https://forums.e-hentai.org/
-ehentai@gmail.com
+tenboro@e-hentai.org
 
 This file is part of Hentai@Home.
 
@@ -167,11 +167,13 @@ public class Stats {
 	}
 
 	public static void bytesSent(int b) {
+		if(bytesSentHistory == null) {
+			return;
+		}
 
 		if(clientRunning) {
 			bytesSent += b;
-			if (bytesSentHistory != null)
-				bytesSentHistory[0] += (int) b;
+			bytesSentHistory[0] += (int) b;
 		}
 
 		statChanged("bytesSent");
