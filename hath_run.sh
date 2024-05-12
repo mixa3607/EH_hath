@@ -13,9 +13,4 @@ exec java -jar ./HentaiAtHome.jar         \
     --download-dir=/hath/download         \
     --log-dir=/hath/log                   \
     --temp-dir=/hath/tmp                  \
-    --port=$HATH_PORT                     \
-    --metrics-name=$METRICS_CLIENT_NAME   \
-    --metrics-user=$METRICS_USER_ID       \
-    --metrics-address=0.0.0.0             \
-    --metrics-port=9500                   \
-    --enable-metrics=true
+    --port=$HATH_PORT                     
