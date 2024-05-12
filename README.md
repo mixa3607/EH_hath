@@ -3,7 +3,7 @@
 ![license](https://img.shields.io/github/license/mixa3607/EH_hath?style=flat-square)
 
 ## About
-This is fork of original [H@H 1.6.2](https://repo.e-hentai.org/hath/HentaiAtHome_1.6.2_src.zip) from [e-hentai.org](https://e-hentai.org/). You can compare this code with branch `SRC_1.6.2`
+This is fork of original [H@H 1.6.3](https://repo.e-hentai.org/hath/HentaiAtHome_1.6.3_src.zip) from [e-hentai.org](https://e-hentai.org/). You can compare this code with branch `SRC_1.6.3`
 
 Some code used from [this post (roundpixl)](https://forums.e-hentai.org/index.php?showtopic=255336)
 
