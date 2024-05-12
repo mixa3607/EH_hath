@@ -55,7 +55,7 @@ public class Settings {
 	private static String clientKey = "", clientHost = "", dataDirPath = "data", logDirPath = "log", cacheDirPath = "cache", tempDirPath = "tmp", downloadDirPath = "download", rpcPath = "15/rpc?";
 
 	private static InetAddress metricsListenAddress = null;
-	private static string metricsClientName = "", metricsUserId = "";
+	private static String metricsClientName = "", metricsUserId = "";
 	private static int metricsPort = 9100;
 	private static boolean enableMetrics = false;
 
