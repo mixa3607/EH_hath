@@ -63,6 +63,7 @@ public class HentaiAtHomeClient implements Runnable {
 	private Out out;
 	private boolean shutdown, reportShutdown, fastShutdown, threadInterruptable, doCertRefresh;
 	private HTTPServer httpServer;
+	private HTTPMetricsServer httpMetricsServer;
 	private ClientAPI clientAPI;
 	private CacheHandler cacheHandler;
 	private ServerHandler serverHandler;
@@ -154,6 +155,12 @@ public class HentaiAtHomeClient implements Runnable {
 			return;
 		}
 
+		httpMetricsServer = new HTTPMetricsServer(this);
+
+		if (Settings.isEnableMetrics() && !httpMetricsServer.startConnectionListener(Settings.getMetricsPort(), Settings.getMetricsAddress())) {
+			Out.warning("Failed to initialize HTTPMetricsServer. Continuing without metrics enabled.");
+		}
+
 		Stats.setProgramStatus("Sending startup notification...");
 
 		Out.info("Notifying the server that we have finished starting up the client...");
@@ -165,6 +172,7 @@ public class HentaiAtHomeClient implements Runnable {
 		}
 
 		httpServer.allowNormalConnections();
+		httpMetricsServer.allowNormalConnections();
 		reportShutdown = true;
 
 		if(Settings.isWarnNewClient()) {
