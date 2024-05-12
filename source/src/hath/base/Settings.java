@@ -57,6 +57,7 @@ public class Settings {
 	private static InetAddress metricsListenAddress = null;
 	private static string metricsClientName = "", metricsUserId = "";
 	private static int metricsPort = 9100;
+	private static boolean enableMetrics = false;
 
 	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 1073741824, currentStaticRangeCount = 0, maxFilenameLength = 125, imageProxyPort = 0;
 	private static long disklimit_bytes = 0, diskremaining_bytes = 0, fileSystemBlocksize = 4096;
