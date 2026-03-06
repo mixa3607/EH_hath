@@ -32,13 +32,13 @@ public class Settings {
 	public static final String NEWLINE = System.getProperty("line.separator");
 
 	// the client build is among other things used by the server to determine the client's capabilities. any forks should use the build number as an indication of compatibility with mainline, rather than an internal build number.
-	public static final int CLIENT_BUILD = 169;
+	public static final int CLIENT_BUILD = 176;
 	public static final int CLIENT_KEY_LENGTH = 20;
 	public static final int MAX_KEY_TIME_DRIFT = 300;
 	public static final int MAX_CONNECTION_BASE = 20;
 	public static final int TCP_PACKET_SIZE = 1460;
 
-	public static final String CLIENT_VERSION = "1.6.3";
+	public static final String CLIENT_VERSION = "1.6.4";
 	public static final String CLIENT_RPC_PROTOCOL = "http://";
 	public static final String CLIENT_RPC_HOST = "rpc.hentaiathome.net";
 	public static final String CLIENT_LOGIN_FILENAME = "client_login";
@@ -59,9 +59,10 @@ public class Settings {
 	private static int metricsPort = 9100;
 	private static boolean enableMetrics = false;
 
+	private static short rpcServerPort = 80;
 	private static int clientID = 0, clientPort = 0, throttle_bytes = 0, overrideConns = 0, serverTimeDelta = 0, maxAllowedFileSize = 1073741824, currentStaticRangeCount = 0, maxFilenameLength = 125, imageProxyPort = 0;
 	private static long disklimit_bytes = 0, diskremaining_bytes = 0, fileSystemBlocksize = 4096;
-	private static boolean verifyCache = false, rescanCache = false, skipFreeSpaceCheck = false, warnNewClient = false, useLessMemory = false, disableBWM = false, disableDownloadBWM = false, disableLogs = false, flushLogs = false, disableIPOriginCheck = false, disableFloodControl = false;
+	private static boolean verifyCache = false, rescanCache = false, skipFreeSpaceCheck = false, warnNewClient = false, useLessMemory = false, disableBWM = false, disableDownloadBWM = false, disableFileVerification = false, disableLogs = false, flushLogs = false, disableIPOriginCheck = false, disableFloodControl = false;
 
 	public static void setActiveClient(HentaiAtHomeClient client) {
 		activeClient = client;
@@ -204,6 +205,9 @@ public class Settings {
 
 				return true;
 			}
+			else if(setting.equals("rpc_server_port")) {
+				rpcServerPort = Short.parseShort(value);
+			}
 			else if(setting.equals("rpc_server_ip")) {
 				synchronized(rpcServerLock) {
 					String[] split = value.split(";");
@@ -287,6 +291,9 @@ public class Settings {
 			else if(setting.equals("disable_download_bwm")) {
 				disableDownloadBWM = value.equals("true");
 			}
+			else if(setting.equals("disable_file_verification")) {
+				disableFileVerification = value.equals("true");
+			}
 			else if(setting.equals("disable_ip_origin_check")) {
 				disableIPOriginCheck = value.equals("true");
 			}
@@ -306,6 +313,7 @@ public class Settings {
 				maxFilenameLength = Integer.parseInt(value);
 			}
 			else if(setting.equals("static_ranges")) {
+				// as of build 174, static ranges are only sent on startup, as the client only needs them for the startup cache pruning
 				staticRanges = new Hashtable<String,Integer>((int) (value.length() * 0.3));
 				currentStaticRangeCount = 0;
 
@@ -315,6 +323,10 @@ public class Settings {
 						staticRanges.put(s, 1);
 					}
 				}
+			}
+			else if(setting.equals("static_range_count")) {
+				// .. however, we still want to update the readout for how many ranges we have assigned
+				currentStaticRangeCount = Integer.parseInt(value);
 			}
 			else if(setting.equals("cache_dir")) {
 				cacheDirPath = value;
@@ -352,7 +364,8 @@ public class Settings {
 			else if(setting.equals("metrics_address")) {
 				try {
 					metricsListenAddress = InetAddress.getByName(value);
-				} catch(Exception e) {
+				}
+				catch(Exception e) {
 					Out.warning("Failed to set metricsListenAddress to " + value + ". Using 127.0.0.1");
 					metricsListenAddress = InetAddress.getByName("127.0.0.1");
 				}
@@ -524,6 +537,10 @@ public class Settings {
 		return disableDownloadBWM;
 	}
 
+	public static boolean isdisableFileVerification() {
+		return disableFileVerification;
+	}
+
 	public static boolean isDisableLogs() {
 		return disableLogs;
 	}
@@ -660,7 +677,7 @@ public class Settings {
 				}
 			}
 
-			return rpcServerCurrent;
+			return rpcServerCurrent + (rpcServerPort == 80 ? "" : ":" + rpcServerPort);
 		}
 	}
 
