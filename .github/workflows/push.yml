@@ -1,49 +1,40 @@
 name: build-container
+run-name: On push
 on:
   push:
     branches:
       - '*'
+    tags:
+      - '*'
 jobs:
-  build:
+  Build-and-push:
+    name: Build and push
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: mixa3607/eh_hath
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: env vars
-        run: |
-          echo "DOCKER_BUILDKIT=1"                >> ${GITHUB_ENV}
-          echo "REGISTRY=ghcr.io"                 >> ${GITHUB_ENV}
-          echo "IMAGE_NAME=${REPO,,}"             >> ${GITHUB_ENV}
-          echo "IMAGE_TAG1=${GIT_SHA,,}"          >> ${GITHUB_ENV}
-          echo "IMAGE_TAG2=${GIT_REF,,}"          >> ${GITHUB_ENV}
-          echo "GIT_REF=${GIT_REF}"               >> ${GITHUB_ENV}
-          echo "GIT_REF_TYPE=${GIT_REF_TYPE}"     >> ${GITHUB_ENV}
-          echo "GIT_COMMIT_SHA=${GIT_SHA}"        >> ${GITHUB_ENV}
-          echo "PROJECT_URL=${PROJECT_URL}"       >> ${GITHUB_ENV}
-          echo "REPO_URL=${REPO_URL}"             >> ${GITHUB_ENV}
-        env:
-          GIT_REF: ${{ github.ref_name }}
-          GIT_REF_TYPE: ${{ github.ref_type }}
-          GIT_SHA: ${{ github.sha }}
-          REPO: "${{ github.repository }}"
-          PROJECT_URL: ${{ github.server_url }}/${{ github.repository }}
-          REPO_URL: ${{ github.repositoryUrl }}
+        uses: actions/checkout@v6
+      - uses: benjlevesque/short-sha@v3.0
+        id: short-sha
       - name: Log in to the Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Config
-        run: docker compose config
-      - name: Build
-        run: export IMAGE_TAG=TMP && docker compose build
-      - name: Push
+      - name: Build and push
         run: |
-          docker tag $REGISTRY/$IMAGE_NAME:TMP $REGISTRY/$IMAGE_NAME:$IMAGE_TAG1
-          docker tag $REGISTRY/$IMAGE_NAME:TMP $REGISTRY/$IMAGE_NAME:$IMAGE_TAG2
-          docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG1
-          docker push $REGISTRY/$IMAGE_NAME:$IMAGE_TAG2
+          docker buildx build \
+            --build-arg CI_COMMIT_REF_NAME="${{ github.ref_name }}" \
+            --build-arg CI_COMMIT_SHORT_SHA="${{ steps.short-sha.outputs.sha }}" \
+            --build-arg CI_COMMIT_SHA="${{ github.sha }}" \
+            --build-arg CI_REPOSITORY_URL="${{ github.event.repository.clone_url }}" \
+            --build-arg CI_PROJECT_URL="${{ github.event.repository.html_url }}" \
+            --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}_${{ steps.short-sha.outputs.sha }}" \
+            --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}" \
+            --push -f ./Dockerfile .

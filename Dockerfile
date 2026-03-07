@@ -1,23 +1,23 @@
-FROM eclipse-temurin:20-jdk-jammy as build
+FROM eclipse-temurin:20-jdk-jammy AS build
 WORKDIR /source
-COPY ./source/ ./
-RUN chmod +x ./make.sh ./makejar.sh && ./make.sh && ./makejar.sh
+COPY ./source ./
+RUN ./make.sh
+RUN ./makejar.sh
 
-FROM eclipse-temurin:20-jre-jammy as app
-ARG HATH_VERSION
-ARG GIT_REF
-ARG GIT_REF_TYPE
-ARG GIT_COMMIT_SHA
-ARG PROJECT_URL
-ARG REPO_URL
-LABEL image.git.ref=$GIT_REF
-LABEL image.git.ref_type=$GIT_REF_TYPE
-LABEL image.git.commit_sha=GIT_COMMIT_SHA
-LABEL image.project_url=$PROJECT_URL
-LABEL image.repo_url=$REPO_URL
-
+FROM eclipse-temurin:20-jre-jammy AS app
 WORKDIR /hath
 COPY --from=build /source/build/HentaiAtHome.jar ./
 COPY ./hath_run.sh ./
+
+ARG CI_PROJECT_URL
+ARG CI_REPOSITORY_URL
+ARG CI_COMMIT_REF_NAME
+ARG CI_COMMIT_SHA
+LABEL org.opencontainers.image.authors="mixa3607"
+LABEL org.opencontainers.image.title="Hath service"
+LABEL org.opencontainers.image.source=$CI_REPOSITORY_URL
+LABEL org.opencontainers.image.url=$CI_PROJECT_URL
+LABEL org.opencontainers.image.ref.name=$CI_COMMIT_REF_NAME
+LABEL org.opencontainers.image.revision=$CI_COMMIT_SHA
 
 CMD ["/hath/hath_run.sh"]
