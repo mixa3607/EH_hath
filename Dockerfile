@@ -1,10 +1,10 @@
-FROM eclipse-temurin:20-jdk-jammy as build
+FROM eclipse-temurin:20-jdk-jammy AS build
 WORKDIR /source
 COPY ./source ./
 RUN ./make.sh
 RUN ./makejar.sh
 
-FROM eclipse-temurin:20-jre-jammy as app
+FROM eclipse-temurin:20-jre-jammy AS app
 WORKDIR /hath
 COPY --from=build /source/build/HentaiAtHome.jar ./
 COPY ./hath_run.sh ./
